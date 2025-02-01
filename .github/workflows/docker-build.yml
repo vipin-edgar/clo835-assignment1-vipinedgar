@@ -12,20 +12,26 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
+      # Step 1: Login to Amazon ECR with specified region
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          region: us-east-2  # Specify the region here
 
+      # Step 2: Build MySQL Docker Image
       - name: Build MySQL Docker Image
         run: |
           docker build -t my_db -f Dockerfile_mysql .
-          docker tag my_db:latest 011926502057.dkr.ecr.us-east-1.amazonaws.com/vipinecr/my_db:latest
+          docker tag my_db:latest 011926502057.dkr.ecr.us-east-2.amazonaws.com/vipinecr/my_db:latest
 
+      # Step 3: Build App Docker Image
       - name: Build App Docker Image
         run: |
           docker build -t my_app -f Dockerfile .
-          docker tag my_app:latest 011926502057.dkr.ecr.us-east-1.amazonaws.com/vipinecr/my_app:latest
+          docker tag my_app:latest 011926502057.dkr.ecr.us-east-2.amazonaws.com/vipinecr/my_app:latest
 
+      # Step 4: Push Docker Images to ECR
       - name: Push Docker Images to ECR
         run: |
-          docker push 011926502057.dkr.ecr.us-east-1.amazonaws.com/vipinecr/my_db:latest
-          docker push 011926502057.dkr.ecr.us-east-1.amazonaws.com/vipinecr/my_app:latest
+          docker push 011926502057.dkr.ecr.us-east-2.amazonaws.com/vipinecr/my_db:latest
+          docker push 011926502057.dkr.ecr.us-east-2.amazonaws.com/vipinecr/my_app:latest

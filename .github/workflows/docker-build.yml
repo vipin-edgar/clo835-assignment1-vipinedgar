@@ -24,8 +24,7 @@ jobs:
       # Step 2: Login to Amazon ECR (region is now set globally)
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
-        with:
-          aws-region: us-east-2  # Specify the region here
+
 
       # Step 3: Build MySQL Docker Image
       - name: Build MySQL Docker Image

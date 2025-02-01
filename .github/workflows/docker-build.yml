@@ -27,12 +27,6 @@ jobs:
         with:
           aws-region: us-east-1  # Correct region (us-east-1)
 
-      # Step 3: Create repositories if they do not exist
-      - name: Create ECR Repositories (if not exist)
-        run: |
-          aws ecr describe-repositories --repository-names my_db || aws ecr create-repository --repository-name my_db
-          aws ecr describe-repositories --repository-names my_app || aws ecr create-repository --repository-name my_app
-
       # Step 4: Build MySQL Docker Image
       - name: Build MySQL Docker Image
         run: |

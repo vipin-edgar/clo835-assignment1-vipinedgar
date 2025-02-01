@@ -19,11 +19,12 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}  # Include the session token
-          aws-region: us-east-2  # Corrected region input
+          aws-region: us-east-1
 
       # Step 2: Login to Amazon ECR (region is now set globally)
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
+        
 
 
       # Step 3: Build MySQL Docker Image

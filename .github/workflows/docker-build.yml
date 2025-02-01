@@ -19,7 +19,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}  # Include the session token
-          aws-region: us-east-1  # Correct region input
+          aws-region: us-east-1  # Corrected region input
 
       # Step 2: Login to Amazon ECR
       - name: Login to Amazon ECR
@@ -27,19 +27,25 @@ jobs:
         with:
           aws-region: us-east-1  # Correct region (us-east-1)
 
-      # Step 3: Build MySQL Docker Image
+      # Step 3: Create repositories if they do not exist
+      - name: Create ECR Repositories (if not exist)
+        run: |
+          aws ecr describe-repositories --repository-names my_db || aws ecr create-repository --repository-name my_db
+          aws ecr describe-repositories --repository-names my_app || aws ecr create-repository --repository-name my_app
+
+      # Step 4: Build MySQL Docker Image
       - name: Build MySQL Docker Image
         run: |
           docker build -t my_db -f Dockerfile_mysql .
           docker tag my_db:latest 011926502057.dkr.ecr.us-east-1.amazonaws.com/vipinecr/my_db:latest
 
-      # Step 4: Build App Docker Image
+      # Step 5: Build App Docker Image
       - name: Build App Docker Image
         run: |
           docker build -t my_app -f Dockerfile .
           docker tag my_app:latest 011926502057.dkr.ecr.us-east-1.amazonaws.com/vipinecr/my_app:latest
 
-      # Step 5: Push Docker Images to ECR
+      # Step 6: Push Docker Images to ECR
       - name: Push Docker Images to ECR
         run: |
           docker push 011926502057.dkr.ecr.us-east-1.amazonaws.com/vipinecr/my_db:latest
